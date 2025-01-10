@@ -14,13 +14,7 @@
   "require": {
     "php": "^7.3 || ^8.0",
     "fakerphp/faker": "^1.20",
-    "nelmio/alice": "^3.8",
-    "wp-cli/wp-cli": "^2.4"
-  },
-  "require-dev": {
-    "wp-cli/db-command": "^2.0",
-    "wp-cli/entity-command": "^2.0",
-    "wp-cli/wp-cli-tests": "^3.1"
+    "nelmio/alice": "^3.8"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
