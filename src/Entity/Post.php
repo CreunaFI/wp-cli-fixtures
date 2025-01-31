@@ -31,6 +31,8 @@ class Post extends Entity {
 	public $meta_input;
 	public $acf;
 	public $mb_relations;
+    public $wpml_lang;
+    public $wpml_source;
 	private $extra = [ 'meta_input', 'acf' ];
 
 	/**
@@ -134,6 +136,31 @@ class Post extends Entity {
 				}
 			}
 		}
+
+        // WPML
+        if (
+            defined('ICL_SITEPRESS_VERSION')
+            && (!empty($this->wpml_lang) || !empty($this->wpml_source))
+        ) {
+
+            $type = get_post_type($post_id);
+            // https://wpml.org/wpml-hook/wpml_element_type/
+            $wpml_element_type = apply_filters('wpml_element_type', $type);
+
+            $trid = false;
+            $lang = null;
+
+            if ($this->wpml_source) {
+                $get_language_args = ['element_id' => $this->wpml_source, 'element_type' => $type];
+                $source_language_info = apply_filters('wpml_element_language_details', null, $get_language_args);
+                $trid = $source_language_info->trid;
+                $lang = $source_language_info->language_code;
+            }
+
+            $set_language_args = ['element_id' => $post_id, 'element_type' => $wpml_element_type, 'trid' => $trid, 'language_code' => $this->wpml_lang, 'source_language_code' => $lang];
+
+            do_action('wpml_set_element_language_details', $set_language_args);
+        }
 
 		return true;
 	}
